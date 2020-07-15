@@ -1,21 +1,32 @@
 import Fluent
 import FluentPostgresDriver
 import Vapor
+import Leaf
 
 // configures your application
+
+extension Application {
+    static let databaseUrl = URL(string: "postgres://vapor_user:root@localhost:5432/todos")!
+}
+
+
 public func configure(_ app: Application) throws {
-    // uncomment to serve files from /Public folder
-    // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
-
-    app.databases.use(.postgres(
-        hostname: Environment.get("DATABASE_HOST") ?? "localhost",
-        username: Environment.get("DATABASE_USERNAME") ?? "vapor_username",
-        password: Environment.get("DATABASE_PASSWORD") ?? "vapor_password",
-        database: Environment.get("DATABASE_NAME") ?? "vapor_database"
-    ), as: .psql)
-
+    // Serves files from `Public/` directory
+    app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
+    
+    // Configure Leaf
+    app.views.use(.leaf)
+    app.leaf.cache.isEnabled = app.environment.isRelease
+    
+    // Configure PGSQL
+    try app.databases.use(.postgres(url: Application.databaseUrl), as: .psql)
+    
+    // Configure migrations 
     app.migrations.add(CreateTodo())
-
+    
+    // Configure migrations
+    app.migrations.add(CreateSmoothie())
+    
     // register routes
     try routes(app)
 }
