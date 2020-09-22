@@ -12,7 +12,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/leaf.git", from: "4.0.0-rc"),
         .package(url: "https://github.com/vapor/fluent.git", from: "4.0.0-rc"),
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.0.0-rc"),
-        .package(path: "../SmoothieModels")
+//        .package(url: "https://github.com/DanielMandea/mtd-models-aot-showcase.git", from: "0.0.1")
     ],
     targets: [
         .target(
@@ -21,7 +21,8 @@ let package = Package(
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
                 .product(name: "Vapor", package: "vapor"),
-                .product(name: "Leaf", package: "leaf")
+                .product(name: "Leaf", package: "leaf"),
+//                .product(name: "SmoothieModels", package: "SmoothieModels")
             ],
             swiftSettings: [
                 // Enable better optimizations when building in Release configuration. Despite the use of

@@ -19,7 +19,14 @@ public func configure(_ app: Application) throws {
     app.leaf.cache.isEnabled = app.environment.isRelease
     
     // Configure PGSQL
-    try app.databases.use(.postgres(url: Application.databaseUrl), as: .psql)
+//    try app.databases.use(.postgres(url: Application.databaseUrl), as: .psql)
+    
+    app.databases.use(.postgres(
+        hostname: Environment.get("DATABASE_HOST") ?? Application.databaseUrl.host!,
+        username: Environment.get("DATABASE_USERNAME") ?? Application.databaseUrl.user!,
+        password: Environment.get("DATABASE_PASSWORD") ?? Application.databaseUrl.password!,
+        database: Environment.get("DATABASE_NAME") ?? "todos"
+    ), as: .psql)
     
     // Configure migrations 
     app.migrations.add(CreateTodo())
